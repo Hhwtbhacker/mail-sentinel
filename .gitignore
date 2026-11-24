@@ -1,0 +1,26 @@
+.env
+data/
+.venv/
+__pycache__/
+*.pyc
+android/.gradle/
+android/**/build/
+android/local.properties
+
+# Local credentials and databases
+.env.*
+!.env.example
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+google-services.json
+*firebase-adminsdk*.json

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#132322">
+  <meta name="description" content="多邮箱智能阅览提醒">
+  <link rel="manifest" href="/assets/manifest.webmanifest">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css?v=9">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('mailManager.theme')==='dark'?'dark':'light'}catch{document.documentElement.dataset.theme='light'}</script>
+  <link rel="stylesheet" href="/assets/theme.css?v=2">
+  <title>邮箱总管 · 智能阅览提醒</title>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/"><span class="brand-mark">邮</span><span>邮箱总管 <small>MAIL MANAGER</small></span></a>
+      <div class="top-actions"><span id="accountName"></span><button id="logoutBtn" class="text-button hidden">退出登录</button></div>
+    </header>
+    <main>
+      <section id="authView" class="auth-layout">
+        <div class="hero">
+          <div class="eyebrow"><span class="pulse"></span> 为重要邮件留出注意力</div>
+          <h1>重要来信，<br><em>及时看见。</em></h1>
+          <p>连接多个邮箱。邮箱总管约每 5 秒检查新邮件，验证码直接显示在总结中，其他邮件可由 DeepSeek 生成总结。</p>
+          <div class="hero-points"><span>多邮箱集中管理</span><span>智能摘要判断</span><span>定时提醒</span></div>
+        </div>
+        <div class="auth-card">
+          <div class="card-kicker">开始使用</div>
+          <h2 id="authTitle">欢迎回来</h2>
+          <p class="muted" id="authHint">登录后查看你的收件提醒</p>
+          <form id="authForm">
+            <label>邮箱地址<input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+            <label>密码<input name="password" type="password" minlength="12" autocomplete="current-password" required placeholder="至少 12 位"></label>
+            <button class="primary" type="submit" id="authSubmit">登录</button>
+          </form>
+          <p class="switch"><span id="authSwitchLead">还没有账号？</span> <button class="link-button" id="authSwitch" type="button">创建账号</button></p>
+          <p id="authError" class="form-error" role="alert"></p>
+        </div>
+      </section>
+      <section id="dashboard" class="hidden">
+        <nav class="app-nav" aria-label="工作台导航">
+          <div class="nav-heading">邮箱总管 <small>MAIL MANAGER</small></div>
+          <a href="#reminders" class="nav-current">收件提醒</a>
+          <a href="#chat">Agent 聊天</a>
+          <a href="#compose">写邮件</a>
+          <a href="#usage">Token 用量</a>
+          <a href="#accounts">邮箱账号</a>
+          <a href="#settings">设置</a>
+          <span class="nav-spacer"></span><span class="nav-state">● 正在监测新邮件</span>
+        </nav>
+        <div class="page-heading">
+          <div><div class="eyebrow"><span class="pulse"></span> 你的邮件观察台</div><h1>今天，有什么<span>值得关注？</span></h1><p>集中查看各邮箱的新邮件与总结。</p></div>
+          <button class="outline" id="refreshBtn">刷新提醒</button>
+        </div>
+        <div class="stats"><div><strong id="unreadCount">0</strong><span>未阅提醒</span></div><div><strong id="mailboxCount">0</strong><span>已连接邮箱</span></div><div><strong id="lastCheck">—</strong><span>最近检查</span></div></div>
+        <section class="panel chat-panel" id="chat">
+          <div class="panel-title"><div><span class="section-index">AGENT CHAT</span><h2>和邮箱总管 Agent 聊聊</h2><p class="panel-subtitle">可以询问最近提醒、邮箱检查状态和 Token 用量</p></div></div>
+          <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+          <form id="chatForm" class="chat-form">
+            <label>模型<select id="chatModel"><option value="deepseek-flash">DeepSeek Flash</option><option value="deepseek-v4-pro">DeepSeek V4 Pro</option></select></label>
+            <label>思考强度<select id="chatEffort"><option value="none">关闭</option><option value="low">低</option><option value="high">高</option><option value="max">最高</option></select></label>
+            <label class="chat-input-label">消息<textarea id="chatInput" maxlength="4000" rows="3" placeholder="例如：最近有什么需要尽快处理的邮件？" required></textarea></label>
+            <button id="chatSend" class="primary" type="submit">发送给 Agent</button>
+          </form>
+          <p class="fine">聊天 Agent 只能读取你的站内提醒、邮箱状态和用量。聊天会使用你保存的 DeepSeek API Key。</p>
+          <details class="compose-mail" id="compose"><summary>＋ 根据要求撰写邮件</summary>
+            <form id="draftForm" class="chat-form">
+              <label>发件箱<select id="draftMailbox" required></select></label>
+              <label>收件人<input id="draftRecipient" type="email" placeholder="name@example.com" required></label>
+              <label class="chat-input-label">写作要求<textarea id="draftPrompt" maxlength="4000" rows="3" placeholder="例如：给老师写一封请假邮件，说明明天因病缺席，语气礼貌。" required></textarea></label>
+              <button id="draftGenerate" class="primary" type="submit">生成草稿</button>
+            </form>
+            <div id="draftPreview" class="draft-preview hidden">
+              <h3>审阅并编辑草稿</h3><p id="draftSender" class="fine"></p>
+              <label>收件人<input id="draftTo" type="email" required></label>
+              <label>主题<input id="draftSubject" maxlength="300" required></label>
+              <label>正文<textarea id="draftBody" maxlength="10000" rows="8" required></textarea></label>
+              <button id="draftSend" class="primary" type="button">确认发送邮件</button>
+            </div>
+            <p class="fine">只支持已连接的 QQ 邮箱。发送前请核对收件人、主题和正文；QQ 邮箱需开启 SMTP 服务。</p>
+          </details>
+        </section>
+        <div class="content-grid">
+          <section class="panel reminders-panel" id="reminders">
+            <div class="panel-title"><div><span class="section-index">01 / INBOX</span><h2>阅览提醒</h2><p class="panel-subtitle">先看智能总结，再决定是否打开原邮件</p></div><div class="reminder-heading-actions"><span class="badge" id="reminderBadge">0 条</span><button id="markAllRead" class="mini-button" type="button" disabled>全部已阅</button></div></div>
+            <div id="reminderList" class="reminder-list"></div>
+          </section>
+          <aside class="sidebar">
+            <section class="panel usage-panel" id="usage">
+              <div class="panel-title"><div><span class="section-index">02 / DEEPSEEK USAGE</span><h2>Token 用量</h2></div></div>
+              <div class="usage-totals"><div><strong id="totalTokens">0</strong><span>累计 token</span></div><div><strong id="todayTokens">0</strong><span>今日 token</span></div></div>
+              <p class="fine">按北京时间统计。仅记录上线后 DeepSeek 返回用量的调用；此前用量无法追溯。</p>
+              <h3 class="usage-heading">每封邮件</h3>
+              <div id="usageList" class="usage-list"></div>
+            </section>
+            <section class="panel" id="accounts">
+              <div class="panel-title"><div><span class="section-index">03 / ACCOUNTS</span><h2>邮箱账号</h2></div></div>
+              <div id="mailboxList"></div>
+              <details class="add-box"><summary>＋ 添加 QQ 邮箱</summary>
+                <form id="mailboxForm">
+                  <label>QQ 邮箱<input name="address" type="email" placeholder="name@qq.com" required></label>
+                  <label>IMAP 专用授权码<input name="secret" type="password" required></label>
+                  <p class="fine">服务器约每 5 秒查看一次是否有新邮件，仅新邮件会进入 Agent。</p>
+                  <button class="primary" type="submit">连接邮箱</button>
+                  <p class="fine">在 QQ 邮箱设置中开启 IMAP，并生成专用授权码。请勿填写 QQ 登录密码。</p>
+                </form>
+              </details>
+              <div class="oauth-buttons"><button id="googleBtn" class="outline">连接 Gmail</button><button id="microsoftBtn" class="outline">连接 Outlook</button></div>
+              <p class="fine">Gmail 和 Outlook 使用官方授权页面；服务器需先配置相应 OAuth 应用。</p>
+            </section>
+            <section class="panel settings-panel" id="settings">
+              <div class="panel-title"><div><span class="section-index">04 / INTELLIGENCE</span><h2>智能设置</h2></div></div>
+              <label class="theme-setting" for="themeSelect"><span>界面主题</span><select id="themeSelect"><option value="light">清爽工作台</option><option value="dark">深色指挥台</option></select></label>
+              <div class="setting-row"><span>DeepSeek API</span><span id="keyStatus" class="status">未配置</span></div>
+              <form id="keyForm"><label class="sr-only" for="apiKey">DeepSeek API Key</label><input id="apiKey" type="password" placeholder="输入 DeepSeek API Key" required><button class="primary" type="submit">保存密钥</button></form>
+              <p class="fine">不配置时，所有新未读邮件都会生成普通提醒。</p>
+              <label class="consent-row"><input id="summaryToggle" type="checkbox"><span><strong>启用邮件智能总结</strong><small>仅对之后发现的新邮件生效</small></span></label>
+              <p class="fine">系统读取有限正文识别验证码，不把验证码交给 DeepSeek；只有开启智能总结后，其他邮件的正文片段才会交给 DeepSeek。网站不保存原始正文。</p>
+              <div class="divider"></div>
+              <div class="setting-row"><span>手机与浏览器推送</span><button id="pushBtn" class="link-button">开启</button></div>
+              <p class="fine">需要 HTTPS 和浏览器通知权限。安卓 APK 将使用系统通知。</p>
+              <a class="apk-link" href="/assets/mail-sentinel-debug.apk" download="邮箱总管.apk">下载安卓测试版 APK ↗</a>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <footer><span>邮箱总管 / MAIL MANAGER</span><span>邮件留在原邮箱 · 发信前由你审阅并确认</span></footer>
+  </div>
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="/assets/app.js?v=12" defer></script>
+</body>
+</html>

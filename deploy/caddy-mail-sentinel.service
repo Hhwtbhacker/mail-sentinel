@@ -1,0 +1,25 @@
+[Unit]
+Description=Caddy for Mail Sentinel
+After=network-online.target mail-sentinel.service
+Wants=network-online.target
+
+[Service]
+Type=notify
+User=hh
+Group=hh
+Environment=SITE_DOMAIN=1.95.120.199
+Environment=XDG_DATA_HOME=/home/hh/.local/share
+Environment=XDG_CONFIG_HOME=/home/hh/.config
+ExecStart=/usr/local/bin/caddy run --config /home/hh/mail-sentinel/deploy/Caddyfile
+ExecReload=/usr/local/bin/caddy reload --config /home/hh/mail-sentinel/deploy/Caddyfile --force
+Restart=always
+RestartSec=3
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/home/hh/.local/share/caddy
+
+[Install]
+WantedBy=multi-user.target

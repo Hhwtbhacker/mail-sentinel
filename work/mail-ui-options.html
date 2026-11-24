@@ -1,0 +1,124 @@
+<div id="mail-ui-options">
+  <style>
+    #mail-ui-options{font-family:system-ui,"Noto Sans SC",sans-serif;color:var(--foreground)}
+    #mail-ui-options *{box-sizing:border-box}
+    #mail-ui-options .viz-carousel>section{min-height:570px}
+    #mail-ui-options .stage{display:grid;grid-template-columns:minmax(0,1fr) 232px;gap:16px;align-items:start}
+    #mail-ui-options .desktop,#mail-ui-options .phone{overflow:hidden;box-shadow:0 15px 40px #15251d24}
+    #mail-ui-options .desktop{height:548px;border-radius:16px}
+    #mail-ui-options .phone{height:548px;border-radius:27px;border:6px solid #29342f}
+    #mail-ui-options .phone-inner{height:100%;overflow:hidden}
+    #mail-ui-options .tiny{font-size:10px;letter-spacing:.02em}
+    #mail-ui-options .small{font-size:12px;line-height:1.45}
+    #mail-ui-options .muted{opacity:.65}
+    #mail-ui-options .strong{font-weight:700}
+    #mail-ui-options .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    #mail-ui-options .badge{display:inline-block;padding:5px 8px;border-radius:99px;font-size:10px;font-weight:700}
+    #mail-ui-options .otp{font-size:24px;letter-spacing:.08em;font-weight:800}
+    #mail-ui-options button{font:inherit}
+
+    #mail-ui-options .a{--accent:#236b51;background:#edf3ed;color:#1d3329}
+    #mail-ui-options .a .desktop{background:#f7faf6;display:grid;grid-template-columns:152px 1fr}
+    #mail-ui-options .a .nav{background:#173b31;color:#eaf5e9;padding:20px 13px;display:flex;flex-direction:column;gap:11px}
+    #mail-ui-options .a .nav b{font-size:16px;margin:0 7px 18px}
+    #mail-ui-options .a .nav span{padding:9px 10px;border-radius:9px;font-size:11px;color:#bed3c6}
+    #mail-ui-options .a .nav span.on{background:#2b604e;color:white}
+    #mail-ui-options .a .nav .bottom{margin-top:auto}
+    #mail-ui-options .a .work{padding:23px;min-width:0}
+    #mail-ui-options .a h2{font-size:22px;margin:9px 0 4px}
+    #mail-ui-options .a .metrics{display:flex;gap:9px;margin:20px 0}
+    #mail-ui-options .a .metric{background:white;border:1px solid #e4ece3;border-radius:13px;padding:11px 13px;flex:1;min-width:0}
+    #mail-ui-options .a .metric b{display:block;font-size:20px;margin-top:5px}
+    #mail-ui-options .a .list{background:white;border:1px solid #e4ece3;border-radius:15px;padding:14px 17px}
+    #mail-ui-options .a .mail{border-top:1px solid #e8eee8;padding:11px 0}
+    #mail-ui-options .a .mail:first-of-type{border:0}
+    #mail-ui-options .a .mail b{font-size:13px}
+    #mail-ui-options .a .code{background:#e9f4ed;border-left:4px solid var(--accent);border-radius:8px;padding:9px 11px;margin-top:8px;color:#14543d}
+    #mail-ui-options .a .phone-inner{background:#f7faf6;padding:17px 13px;color:#1d3329}
+    #mail-ui-options .a .phone-header{background:#173b31;color:white;margin:-17px -13px 16px;padding:20px 15px 18px}
+    #mail-ui-options .a .phone h3{margin:5px 0 14px;font-size:18px}
+    #mail-ui-options .a .phone-card{background:white;border:1px solid #e4ece3;border-radius:14px;padding:13px;margin-bottom:10px}
+    #mail-ui-options .a .phone .code{margin-top:9px}
+
+    #mail-ui-options .b{--accent:#a0e4c6;background:#0e1820;color:#e9f4f1}
+    #mail-ui-options .b .desktop{background:#121e27;display:grid;grid-template-columns:1fr 230px}
+    #mail-ui-options .b .main{padding:23px;min-width:0}
+    #mail-ui-options .b .top{border-bottom:1px solid #30414a;padding-bottom:16px}
+    #mail-ui-options .b h2{font-size:24px;margin:18px 0 3px}
+    #mail-ui-options .b .tabs{display:flex;gap:18px;color:#96aeb3;margin:18px 0 11px}
+    #mail-ui-options .b .tabs strong{color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:8px}
+    #mail-ui-options .b .mail{padding:12px 14px;margin:8px 0;border-radius:10px;background:#1d2d35;border:1px solid #2d4249}
+    #mail-ui-options .b .mail.selected{border-color:#75cdaa;background:#233d3d}
+    #mail-ui-options .b .mail b{font-size:13px}
+    #mail-ui-options .b .side{background:#182931;border-left:1px solid #31434b;padding:20px 16px}
+    #mail-ui-options .b .side h3{font-size:15px;margin:16px 0}
+    #mail-ui-options .b .code{font-size:24px;letter-spacing:.1em;color:var(--accent);font-weight:800;margin:12px 0}
+    #mail-ui-options .b .agent{border-top:1px solid #344b50;margin-top:24px;padding-top:18px}
+    #mail-ui-options .b .phone-inner{background:#121e27;color:#e9f4f1;padding:18px 13px}
+    #mail-ui-options .b .phone h3{font-size:19px;margin:27px 0 14px}
+    #mail-ui-options .b .phone-card{background:#1e3038;border:1px solid #355055;border-radius:12px;padding:13px;margin-bottom:9px}
+    #mail-ui-options .b .phone .code{margin:8px 0}
+
+    #mail-ui-options .c{--accent:#d45d40;background:#f8f4ef;color:#272a2b}
+    #mail-ui-options .c .desktop{background:#fffdf9;display:grid;grid-template-columns:1fr 230px}
+    #mail-ui-options .c .main{padding:22px 25px;min-width:0}
+    #mail-ui-options .c .top{border-bottom:2px solid #2b3030;padding-bottom:15px}
+    #mail-ui-options .c h2{font-family:Georgia,"Noto Serif SC",serif;font-size:25px;margin:16px 0 4px}
+    #mail-ui-options .c .mail{border-bottom:1px solid #e6ded4;padding:14px 0}
+    #mail-ui-options .c .mail b{font-size:14px}
+    #mail-ui-options .c .mail p{font-size:12px;margin:5px 0 0;color:#59605b}
+    #mail-ui-options .c .code{color:var(--accent);font-family:Georgia,serif;font-size:25px;font-weight:700;letter-spacing:.1em}
+    #mail-ui-options .c .side{background:#f3eee7;border-left:1px solid #e3dace;padding:20px 16px}
+    #mail-ui-options .c .side h3{font-family:Georgia,"Noto Serif SC",serif;margin:6px 0 15px;font-size:17px}
+    #mail-ui-options .c .side .divider{border-top:1px solid #dcd1c3;margin:16px 0}
+    #mail-ui-options .c .phone-inner{background:#fffdf9;color:#272a2b;padding:18px 13px}
+    #mail-ui-options .c .phone h3{font-family:Georgia,"Noto Serif SC",serif;font-size:23px;margin:23px 0 15px}
+    #mail-ui-options .c .phone-card{border-bottom:1px solid #e6ded4;padding:12px 3px}
+    #mail-ui-options .c .phone .code{font-size:21px;margin:7px 0}
+    @media(max-width:840px){#mail-ui-options .stage{grid-template-columns:1fr}#mail-ui-options .viz-carousel>section{min-height:1015px}#mail-ui-options .phone{width:232px;margin:auto}}
+    @media(max-width:500px){#mail-ui-options .desktop{height:500px}#mail-ui-options .a .desktop{grid-template-columns:95px 1fr}#mail-ui-options .a .nav{padding:12px 5px}#mail-ui-options .a .nav b{font-size:11px;margin:0 4px 12px}#mail-ui-options .a .nav span{font-size:9px;padding:6px}#mail-ui-options .a .work,#mail-ui-options .b .main,#mail-ui-options .c .main{padding:13px}#mail-ui-options .b .desktop,#mail-ui-options .c .desktop{grid-template-columns:1fr}#mail-ui-options .b .side,#mail-ui-options .c .side{display:none}#mail-ui-options .a .metrics{gap:4px}#mail-ui-options .a .metric{padding:7px}#mail-ui-options .a .metric b{font-size:14px}}
+  </style>
+  <div class="viz-carousel" aria-label="邮箱总管界面方案" data-previous-label="上一种" data-next-label="下一种">
+    <section class="a" data-variant="清爽工作台" aria-label="清爽工作台方案">
+      <div class="stage">
+        <div class="desktop" aria-label="清爽工作台网页预览">
+          <div class="nav"><b>▣ 邮箱总管</b><span class="on">收件提醒　12</span><span>Agent 聊天</span><span>写邮件</span><span>Token 用量</span><span class="bottom">邮箱与设置</span></div>
+          <div class="work"><div class="row"><span class="tiny muted">收件工作台 / 今天</span><span class="tiny muted">● 5 秒前已检查</span></div><h2>早上好，先看重要邮件</h2><div class="small muted">2 个邮箱 · 3 封新邮件</div>
+            <div class="metrics"><div class="metric"><span class="tiny muted">新邮件</span><b>03</b></div><div class="metric"><span class="tiny muted">待处理</span><b>01</b></div><div class="metric"><span class="tiny muted">今日 Token</span><b>1.2k</b></div></div>
+            <div class="list"><div class="row"><b class="small">最新提醒</b><span class="tiny muted">查看全部 →</span></div>
+              <div class="mail"><div class="row"><b>登录验证码</b><span class="badge" style="background:#ffe9d7;color:#9a4e22">验证码</span></div><div class="tiny muted">study@qq.com · 刚刚</div><div class="code"><span class="tiny">验证码</span><div class="otp">482019</div></div></div>
+              <div class="mail"><div class="row"><b>下周项目会议安排</b><span class="tiny muted">4 分钟前</span></div><div class="tiny muted">work@qq.com</div><div class="small">Agent 总结：请确认周二会议时间与议程。</div></div>
+              <div class="mail"><div class="row"><b>月度账单已生成</b><span class="tiny muted">12 分钟前</span></div><div class="tiny muted">study@qq.com</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="phone" aria-label="清爽工作台手机预览"><div class="phone-inner"><div class="phone-header"><div class="tiny">邮箱总管　　● 已同步</div><h3>今天的来信</h3><div class="small">3 封新邮件 · 2 个邮箱</div></div><div class="phone-card"><div class="tiny muted">study@qq.com · 刚刚</div><div class="strong small">登录验证码</div><div class="code"><span class="tiny">验证码</span><div class="otp">482019</div></div></div><div class="phone-card"><div class="tiny muted">work@qq.com · 4 分钟前</div><div class="strong small">下周项目会议安排</div><div class="small">请确认周二会议时间与议程。</div></div><div class="phone-card small">聊天　　写邮件　　用量</div></div></div>
+      </div>
+    </section>
+    <section class="b" data-variant="深色指挥台" aria-label="深色指挥台方案" hidden>
+      <div class="stage">
+        <div class="desktop" aria-label="深色指挥台网页预览"><div class="main"><div class="row top"><b>邮箱总管</b><span class="tiny muted">2 个邮箱在线　● 5 秒前检查</span></div><h2>收件箱</h2><div class="small muted">需要你处理的邮件集中在这里</div><div class="tabs small"><strong>全部　3</strong><span>验证码</span><span>待处理</span></div><div class="mail selected"><div class="row"><b>登录验证码</b><span class="tiny">刚刚</span></div><div class="tiny muted">study@qq.com</div></div><div class="mail"><div class="row"><b>下周项目会议安排</b><span class="tiny">4 分钟前</span></div><div class="tiny muted">work@qq.com</div></div><div class="mail"><div class="row"><b>月度账单已生成</b><span class="tiny">12 分钟前</span></div><div class="tiny muted">study@qq.com</div></div></div><div class="side"><div class="tiny muted">当前邮件 / study@qq.com</div><h3>登录验证码</h3><div class="small muted">邮件正文提取</div><div class="code">482019</div><div class="tiny muted">点击邮件可前往原邮箱</div><div class="agent"><div class="tiny" style="color:var(--accent)">AGENT</div><p class="small">验证码已提取，无需调用模型。</p><div class="tiny muted">今日用量　1,204 token</div></div></div></div>
+        <div class="phone" aria-label="深色指挥台手机预览"><div class="phone-inner"><div class="row tiny"><b>邮箱总管</b><span>● 已同步</span></div><h3>收件箱　03</h3><div class="tabs tiny"><strong>全部</strong><span>验证码</span><span>待处理</span></div><div class="phone-card"><div class="tiny muted">study@qq.com · 刚刚</div><div class="strong small">登录验证码</div><div class="code">482019</div><div class="tiny muted">直接复制验证码</div></div><div class="phone-card"><div class="tiny muted">work@qq.com</div><div class="strong small">下周项目会议安排</div><div class="small">请确认周二会议时间。</div></div><div class="phone-card small">✉ 收件　　◉ 聊天　　▤ 用量</div></div></div>
+      </div>
+    </section>
+    <section class="c" data-variant="极简阅览" aria-label="极简阅览方案" hidden>
+      <div class="stage">
+        <div class="desktop" aria-label="极简阅览网页预览"><div class="main"><div class="row top"><b>邮箱总管</b><span class="small">提醒　　聊天　　写信　　用量</span></div><h2>今天的邮件</h2><div class="small muted">新邮件 3 封 · 最近检查 5 秒前</div><div class="mail"><div class="row"><b>登录验证码</b><span class="tiny muted">刚刚</span></div><div class="tiny muted">study@qq.com</div><p>验证码 <span class="code">482019</span></p></div><div class="mail"><div class="row"><b>下周项目会议安排</b><span class="tiny muted">4 分钟前</span></div><div class="tiny muted">work@qq.com</div><p>请确认周二会议时间与议程。</p></div><div class="mail"><div class="row"><b>月度账单已生成</b><span class="tiny muted">12 分钟前</span></div><div class="tiny muted">study@qq.com</div><p>新账单已生成，可按需查看。</p></div></div><div class="side"><div class="tiny muted">快速记录</div><h3>今天</h3><div class="small">3 封新邮件</div><div class="divider"></div><div class="small">验证码直接显示在邮件摘要中。</div><div class="divider"></div><div class="tiny muted">DeepSeek 今日消耗</div><div class="strong">1,204 token</div></div></div>
+        <div class="phone" aria-label="极简阅览手机预览"><div class="phone-inner"><div class="row tiny"><b>邮箱总管</b><span>设置</span></div><h3>今天的邮件</h3><div class="tiny muted">3 封新邮件 · 5 秒前检查</div><div class="phone-card"><div class="row"><b class="small">登录验证码</b><span class="tiny muted">刚刚</span></div><div class="tiny muted">study@qq.com</div><div class="code">482019</div></div><div class="phone-card"><div class="strong small">下周项目会议安排</div><div class="tiny muted">work@qq.com</div><div class="small">请确认周二会议时间与议程。</div></div><div class="phone-card"><div class="strong small">月度账单已生成</div><div class="tiny muted">study@qq.com</div></div></div></div>
+      </div>
+    </section>
+  </div>
+  <script>
+    const uiRoot = document.getElementById('mail-ui-options');
+    if (globalThis.Tweak && uiRoot) {
+      for (const [selector, initial] of [['.a','#236b51'],['.b','#a0e4c6'],['.c','#d45d40']]) {
+        const panel = uiRoot.querySelector(selector);
+        const state = {accent: initial};
+        const update = () => panel.style.setProperty('--accent', state.accent);
+        update();
+        const tweak = new Tweak({container:panel,onChange:update});
+        tweak.addColorPicker(state,'accent',{label:'强调色',reference:'--accent'});
+      }
+    }
+  </script>
+</div>
